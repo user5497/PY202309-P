@@ -1,7 +1,7 @@
 ##### 선호도 기반 음식 추천 프로그램 ####
 
-# menu editing func
-# 17일까지 : add menu 완성 & delete menu 진행하기. 
+# menu editing func/ File Storage func 
+# 24일까지. delete Menu 완성, 파일 저장 기능 진행. 
 
 
 
@@ -9,6 +9,9 @@ menu = {} # 카테고리와 메뉴 저장.
 meno = {} # 음식별 메모.
 ratings = {} # 음식별 별점. 
 
+
+def del_menu():
+    pass
 
 # load data
 lines = open("./menus.csv","r",encoding = "utf8").readlines()
@@ -24,8 +27,8 @@ for line in lines:
             continue
         menu[tokens[0]] = (food_list)
     
-#print("menu",menu)
-#print("ratings",ratings)
+print("menu",menu)
+print("ratings",ratings)
 
 
 
@@ -62,8 +65,30 @@ while True:
     
     elif (choice == 2): 
         print("메뉴를 삭제합니다. ")
+        del_menu() # while True 반복 함수화하기. 
 
-        del_cat = input("삭제를 원하는 메뉴가 있는 카테고리를 선택해 주세요. ")
-        del_menu = input("삭제를 원하는 메뉴를 선택해 주세요. ")
-
+        while True: # 카테고리 존재하지 않는 경우 삭제. 
+            del_cate = input("삭제를 원하는 메뉴가 있는 카테고리를 선택해 주세요. ")
+            if del_cate not in menu.keys():
+                print("선택한 카테고리가 존재하지 않습니다. 다시 선택해 주세요. ")
+                continue
+            else:
+                break
         
+        while True:
+            print(*menu[del_cate])
+            del_menu = input("삭제를 원하는 메뉴를 선택해 주세요. ")
+            if del_menu not in menu[del_cate]:
+                print("해당 카테고리에 존재하지 않는 음식입니다. ")
+                continue
+            else:
+                break
+
+        menu[del_cate].remove(del_menu)
+        # print("menu", menu)
+            
+        
+
+
+
+       
