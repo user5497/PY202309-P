@@ -10,9 +10,6 @@ meno = {} # 음식별 메모.
 ratings = {} # 음식별 별점. 
 
 
-def del_menu():
-    pass
-
 # load data
 lines = open("./menus.csv","r",encoding = "utf8").readlines()
 for line in lines:
@@ -27,8 +24,8 @@ for line in lines:
             continue
         menu[tokens[0]] = (food_list)
     
-print("menu",menu)
-print("ratings",ratings)
+#print("menu",menu)
+#print("ratings",ratings)
 
 
 
@@ -39,8 +36,9 @@ while True:
       1. 메뉴 추가 
       2. 메뉴 삭제 
       3. 메뉴 추천 
+      4. 종료
       """)
-    choice = int(input("할 일을 선택해주세요. (1~3)"))
+    choice = int(input("할 일을 선택해주세요. (1~4)"))
 
     if (choice == 1):
         print("메뉴를 추가합니다.")
@@ -65,9 +63,9 @@ while True:
     
     elif (choice == 2): 
         print("메뉴를 삭제합니다. ")
-        del_menu() # while True 반복 함수화하기. 
 
         while True: # 카테고리 존재하지 않는 경우 삭제. 
+            print(*menu.keys())
             del_cate = input("삭제를 원하는 메뉴가 있는 카테고리를 선택해 주세요. ")
             if del_cate not in menu.keys():
                 print("선택한 카테고리가 존재하지 않습니다. 다시 선택해 주세요. ")
@@ -85,10 +83,40 @@ while True:
                 break
 
         menu[del_cate].remove(del_menu)
-        # print("menu", menu)
+        del ratings[del_menu]
+        print("삭제가 완료되었습니다. ", *menu[del_cate])
+
+       
+
+
+    elif (choice == 3 ):
+        pass
+
+    elif (choice == 4): 
+        # 종료 및 파일에 반영하는 기능 구현하기. 
+        print("종료합니다. ")
+        write_fp = open("./test.csv","w",encoding = "utf8")
+        #for category, menus in menu.items():
+        # menus에서는 keys들만 뽑고 ratings 나열하는 방식? 
+        for category in menu.keys():
+            line = [category]
+            for menu,rating in ratings.items():
+                line.append(menu)
+                line.append(rating)
+            
+            write_line = str(line).replace("'","").replace("[","").replace("]","")
+            print("line: ",line)
+            write_fp.write(write_line + "\n")
+        
+        write_fp.close()
+        break
+
+
+    else: 
+        print("잘못된 번호를 선택했습니다. 다시 입력해 주세요.")
+        continue
             
         
-
 
 
        
