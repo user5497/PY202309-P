@@ -1,36 +1,21 @@
 ##### 선호도 기반 음식 추천 프로그램 ####
 
 # menu editing func/ File Storage func 
-# 24일까지. delete Menu 완성, 파일 저장 기능 진행. 
+# 22일까지 기능 함수화 및 파일 분리 기능 구현하기. 
 
-
+import file_adit as fa # 파일 입출력기능.
+import choice # 각 선택지에 대한 기능들.
 
 menu = {} # 카테고리와 메뉴 저장. 
 meno = {} # 음식별 메모.
 ratings = {} # 음식별 별점. 
 
 
-# load data
-lines = open("./menus.csv","r",encoding = "utf8").readlines()
-for line in lines:
-    tokens = line.strip().split(",")
-    # print(tokens)
-    food_list = [] # 차후 편집을 위해 list 저장. 
-    for i in range(1,len(tokens)):
-        try:
-            ratings[tokens[2*i-1]] = tokens[2*i] # 음식별 별점 할당. 
-            food_list.append(tokens[2*i-1])
-        except IndexError: # 빈 값을 입력하려 하는 경우 제외 
-            continue
-        menu[tokens[0]] = (food_list)
+# 메뉴, 선호도 등 정보 가져오기 
+fa.load_file(ratings,menu)
+print("menu",menu)
+print("ratings",ratings)
     
-#print("menu",menu)
-#print("ratings",ratings)
-
-
-
-# 선택지 제공(메뉴 추가, 메뉴 삭제, 메뉴 추천) // 완료 시 파일 저장 기능
-
 while True: 
     print(""" 
       1. 메뉴 추가 
@@ -44,19 +29,7 @@ while True:
         print("메뉴를 추가합니다.")
         print("메뉴: ", *menu.keys()) # 카테고리 보여주기
 
-        while True: # 알맞은 카테고리만 입력받기 
-            add_cate = input("메뉴 추가를 원하는 카테고리를 선택해 주세요. ")
-            if add_cate not in menu.keys():
-                print("입력한 카테고리가 존재하지 않습니다. ") 
-            else:
-                break
-        
-        add_menu = input("추가를 원하는 메뉴를 입력해 주세요. ")
-        add_rat = input("추가한 메뉴에 별점을 남겨 주세요. ")
-        
-        menu[add_cate].append(add_menu) 
-        ratings[add_menu] = add_rat
-        print("메뉴 추가가 완료되었습니다. ")
+        choice.add_menu(menu,ratings)
        
         #print("menu", menu)
         #print("ratings",ratings)
@@ -64,59 +37,20 @@ while True:
     elif (choice == 2): 
         print("메뉴를 삭제합니다. ")
 
-        while True: # 카테고리 존재하지 않는 경우 삭제. 
-            print(*menu.keys())
-            del_cate = input("삭제를 원하는 메뉴가 있는 카테고리를 선택해 주세요. ")
-            if del_cate not in menu.keys():
-                print("선택한 카테고리가 존재하지 않습니다. 다시 선택해 주세요. ")
-                continue
-            else:
-                break
+        print(*menu.keys())
+        choice.del_menu()
         
-        while True:
-            print(*menu[del_cate])
-            del_menu = input("삭제를 원하는 메뉴를 선택해 주세요. ")
-            if del_menu not in menu[del_cate]:
-                print("해당 카테고리에 존재하지 않는 음식입니다. ")
-                continue
-            else:
-                break
-
-        menu[del_cate].remove(del_menu)
-        del ratings[del_menu]
-        print("삭제가 완료되었습니다. ", *menu[del_cate])
-
-       
-
 
     elif (choice == 3 ):
         pass
 
     elif (choice == 4): 
-        # 종료 및 파일에 반영하는 기능 구현하기. 
+        # 종료 및 파일에 반영
         print("종료합니다. ")
-        write_fp = open("./test.csv","w",encoding = "utf8")
-        #for category, menus in menu.items():
-        # menus에서는 keys들만 뽑고 ratings 나열하는 방식? 
-        for category in menu.keys():
-            line = [category]
-            for menu,rating in ratings.items():
-                line.append(menu)
-                line.append(rating)
-            
-            write_line = str(line).replace("'","").replace("[","").replace("]","")
-            print("line: ",line)
-            write_fp.write(write_line + "\n")
-        
-        write_fp.close()
+        fa.save_file(menu,ratings)
         break
-
 
     else: 
         print("잘못된 번호를 선택했습니다. 다시 입력해 주세요.")
         continue
             
-        
-
-
-       
