@@ -1,5 +1,8 @@
 ##### 선호도 기반 음식 추천 프로그램 ####
 
+# ~12/1 File Storage Func 완성 
+# memos 저장 기능도 같이 추가하기. 
+
 import file_adit as fa # 파일 입출력기능.
 import add_menu
 import del_menu
@@ -10,7 +13,12 @@ ratings = {} # 음식별 별점.
 
 
 # 메뉴, 선호도 등 정보 가져오기 
-fa.load_file(menus,ratings)
+fa.load_file("./menus.csv",menus,ratings)
+
+# 메모 가져오기 
+#fa.load_file("./memos.csv")
+
+# 테스트 
 #print("menu",menus)
 #print("ratings",ratings)
     
@@ -41,7 +49,7 @@ while True:
     elif (choice == 4): 
         # 종료 및 파일에 반영
         print("종료합니다. ")
-        fa.save_file(menus,ratings)
+        fa.save_file("./menus.csv",menus,ratings)
         break
 
     else: 
