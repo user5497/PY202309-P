@@ -1,26 +1,31 @@
 ##### 선호도 기반 음식 추천 프로그램 ####
 
-# ~12/1 File Storage Func 완성 
+# ~12/1 File Storage Func 완성 // 일정 밀림. 
 # memos 저장 기능도 같이 추가하기. 
 
-import file_adit as fa # 파일 입출력기능.
+## 일정 조금씩 밀림, 일정 나중에 수정하기. 
+# 메뉴 추천 기능 시작, 카테고리 선택 완성 및 메모 저장 기능 진행하기.  
+# 카테고리 선택: 음식을 추천받고자 하는 카테고리 선택. 
+# 메모 저장: 추천된 음식에 코멘트 남기기. 
+
+import file_adit0 as fa # 파일 입출력기능.
+#import file_edit as fa
 import add_menu
 import del_menu
 
-menus = {} # 카테고리와 메뉴 저장. 
-meno = {} # 음식별 메모. 
-ratings = {} # 음식별 별점. 
-
-
 # 메뉴, 선호도 등 정보 가져오기 
+menus = {} # 카테고리와 메뉴 저장. 
+ratings = {} # 음식별 별점. 
 fa.load_file("./menus.csv",menus,ratings)
 
-# 메모 가져오기 
-#fa.load_file("./memos.csv")
+#메모 가져오기 
+memos = {} # 음식별 메모. 
+memos = fa.load_file("./memos.csv",menus,ratings)
 
 # 테스트 
-#print("menu",menus)
-#print("ratings",ratings)
+print("menu",menus)
+print("ratings",ratings)
+print("momos",memos)
     
 while True: 
     print(""" 
