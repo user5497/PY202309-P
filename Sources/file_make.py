@@ -23,26 +23,8 @@ if __name__ == "__main__":
 
     df = pd.DataFrame(datas)
     # 테스트
-    # print(df) 
+    #print(df) 
 
     # csv파일 작성
     df.to_csv("menus.csv", encoding="utf8")
 
-
-
-
-######################
-# 데이터 수정기능 테스트 
-data = pd.read_csv('menus.csv')
-
-#print(data.Category)
-
-# 내용 추가 방법
-#data.loc[(data['Category'] == '한식') & (data['Menu'] == '비빔밥'), 'Memo'] = '새로운 메모'
-#print(data)
-
-
-
-#######################
-# 수정사항 업로드 
-#data.to_csv("menus.csv", encoding="utf8")

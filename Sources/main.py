@@ -1,20 +1,35 @@
 ##### 선호도 기반 음식 추천 프로그램 ####
 
 import pandas as pd
-import choice # 선택지별 기능
-
+import choice
 
 
 # 정보 가져오기
 data= pd.read_csv('menus.csv') 
-#print(data.to_string(index=False)) # 추가 인덱스 생성 제거 
 
-# 카테고리 정보 저장
-category = [] 
-for cate in data.Category:
-    if cate not in category:
-        category.append(cate)
-#print("cate",*category)
+# 정보 저장.  
+menus = {}
+for index, row in data.iterrows():
+    category = row['Category']
+    menu = row['Menu']
+    if category not in menus:
+        menus[category] = set()
+    menus[category].add(menu)
+
+ratings = {}
+for index, row in data.iterrows():
+    menu = row['Menu']
+    rating = row['Ratings']
+    ratings[menu] = rating
+
+memos = {}
+for index, row in data.iterrows():
+    menu = row['Menu']
+    memo = row['Memo'] 
+    memos[menu] = memo
+
+
+
 
 
 
@@ -25,31 +40,45 @@ while True:
       3. 메뉴 추천 
       4. 종료
       """)
-    choice = int(input("할 일을 선택해주세요. (1~4)"))
+    choice_todo = int(input("할 일을 선택해주세요. (1~4)"))
 
-    if (choice == 1):
+    if (choice_todo == 1):
         print("메뉴를 추가합니다.")
-        print("메뉴: ", *category) # 카테고리 보여주기
+        # 카테고리 보여주기 
+        choice.add_menu(menus,ratings,memos)
 
-        choice.add_menu(data,category)
-    
 
-    elif (choice == 2): 
+    elif (choice_todo == 2): 
         print("메뉴를 삭제합니다. ")
-        print(*category)
-        choice.del_menu(data)
+        choice.del_menu(menus,ratings,memos)
         
 
 
-    elif (choice == 3 ):
+    elif (choice_todo == 3 ):
         pass
 
 
+    # 종료 및 파일에 반영
+    elif (choice_todo == 4): 
 
-    elif (choice == 4): 
-        # 종료 및 파일에 반영
+         # 테스트
+        #print("menus",menus)
+        #print("ratings",ratings)
+        #print("memos",memos)
+
         print("종료합니다. ")
-        # 파일 반영
+
+        # menus, ratings, memos를 DataFrame으로 변환
+        menus_df = pd.DataFrame(list(menus.items()), columns=['Category', 'Menu']).explode('Menu').reset_index(drop=True)
+        ratings_df = pd.DataFrame(list(ratings.items()), columns=['Menu', 'Ratings'])
+        memos_df = pd.DataFrame(list(memos.items()), columns=['Menu', 'Memo'])
+
+        # menus, ratings, memos를 병합
+        result_df = pd.merge(menus_df, ratings_df, on='Menu')
+        result_df = pd.merge(result_df, memos_df, on='Menu')
+
+        # 결과를 csv 파일로 저장
+        result_df.to_csv('menus.csv', index=False)
         break
 
     else: 
@@ -59,13 +88,11 @@ while True:
 
 
 
-# pandas 도입하고 내용 너무 간단해짐. 추가할 내용 생각해보기 
-# 막 가장 많이 먹은 음식 그래프 표시나 별점 높은 순 시각화 이런 거 할 수 있나
-# 오류처리 까먹지말기. (try - except)
 
-# ~12/1 File Storage Func 완성 // 일정 밀림. 
-# memos 저장 기능도 같이 추가하기. 
+
+
 
 # 메뉴 추천 기능 시작, 카테고리 선택 완성 및 메모 저장 기능 -진행-하기. 
 # 카테고리 선택: 음식을 추천받고자 하는 카테고리 선택. 
 # 메모 저장: 추천된 음식에 코멘트 남기기. 
+
