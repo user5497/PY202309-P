@@ -1,19 +1,23 @@
 ##### 선호도 기반 음식 추천 프로그램 ####
 
-
 import pandas as pd
-# 선택지별 기능
-import choice
-# 파일 관련 기능
-#import file_adit0 as fa 
+import choice # 선택지별 기능
+
 
 
 # 정보 가져오기
-data= pd.read_csv('menus.csv')
-print("data",data)
+data= pd.read_csv('menus.csv') 
+#print(data.to_string(index=False)) # 추가 인덱스 생성 제거 
+
+# 카테고리 정보 저장
+category = [] 
+for cate in data.Category:
+    if cate not in category:
+        category.append(cate)
+#print("cate",*category)
 
 
-    
+
 while True: 
     print(""" 
       1. 메뉴 추가 
@@ -25,23 +29,27 @@ while True:
 
     if (choice == 1):
         print("메뉴를 추가합니다.")
-        print("메뉴: ", data['Categpry']) # 카테고리 보여주기
+        print("메뉴: ", *category) # 카테고리 보여주기
 
-        choice.add_menu(menus,ratings)
+        choice.add_menu(data,category)
     
+
     elif (choice == 2): 
         print("메뉴를 삭제합니다. ")
-        print(*menus.keys())
-        choice.del_menu(menus,ratings)
+        print(*category)
+        choice.del_menu(data)
         
+
 
     elif (choice == 3 ):
         pass
 
+
+
     elif (choice == 4): 
         # 종료 및 파일에 반영
         print("종료합니다. ")
-        #fa.save_file("./menus.csv",menus,ratings)
+        # 파일 반영
         break
 
     else: 
@@ -52,6 +60,7 @@ while True:
 
 
 # pandas 도입하고 내용 너무 간단해짐. 추가할 내용 생각해보기 
+# 막 가장 많이 먹은 음식 그래프 표시나 별점 높은 순 시각화 이런 거 할 수 있나
 # 오류처리 까먹지말기. (try - except)
 
 # ~12/1 File Storage Func 완성 // 일정 밀림. 
