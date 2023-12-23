@@ -46,6 +46,7 @@ def del_menu(menus,ratings,memos):
 
     menus[del_cate].remove(del_menu)
     del ratings[del_menu]
+    del memos[del_menu]
     print("삭제가 완료되었습니다. ")
 
     #print("menus",menus[del_cate])
